@@ -2,7 +2,7 @@
 
 package frc.robot
 
-import edu.wpi.first.wpilibj.RobotBase
+import org.wpilib.framework.RobotBase
 
 /**
  * Main initialization function. Do not perform any initialization here other than calling

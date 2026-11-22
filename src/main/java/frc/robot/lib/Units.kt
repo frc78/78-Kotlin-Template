@@ -1,42 +1,50 @@
 package frc.robot.lib
 
-import edu.wpi.first.units.AngularAccelerationUnit
-import edu.wpi.first.units.MomentOfInertiaUnit
-import edu.wpi.first.units.Units.Amps
-import edu.wpi.first.units.Units.Centimeters
-import edu.wpi.first.units.Units.Degrees
-import edu.wpi.first.units.Units.FeetPerSecond
-import edu.wpi.first.units.Units.Inches
-import edu.wpi.first.units.Units.InchesPerSecond
-import edu.wpi.first.units.Units.KilogramSquareMeters
-import edu.wpi.first.units.Units.Kilograms
-import edu.wpi.first.units.Units.Meters
-import edu.wpi.first.units.Units.MetersPerSecond
-import edu.wpi.first.units.Units.MetersPerSecondPerSecond
-import edu.wpi.first.units.Units.Pounds
-import edu.wpi.first.units.Units.RPM
-import edu.wpi.first.units.Units.Radians
-import edu.wpi.first.units.Units.RadiansPerSecond
-import edu.wpi.first.units.Units.RadiansPerSecondPerSecond
-import edu.wpi.first.units.Units.Rotations
-import edu.wpi.first.units.Units.RotationsPerSecond
-import edu.wpi.first.units.Units.RotationsPerSecondPerSecond
-import edu.wpi.first.units.Units.Second
-import edu.wpi.first.units.Units.Seconds
-import edu.wpi.first.units.Units.Volts
-import edu.wpi.first.units.VoltageUnit
-import edu.wpi.first.units.measure.Angle
-import edu.wpi.first.units.measure.AngularAcceleration
-import edu.wpi.first.units.measure.AngularVelocity
-import edu.wpi.first.units.measure.Current
-import edu.wpi.first.units.measure.Distance
-import edu.wpi.first.units.measure.LinearAcceleration
-import edu.wpi.first.units.measure.LinearVelocity
-import edu.wpi.first.units.measure.Mass
-import edu.wpi.first.units.measure.MomentOfInertia
-import edu.wpi.first.units.measure.Time
-import edu.wpi.first.units.measure.Velocity
-import edu.wpi.first.units.measure.Voltage
+import org.wpilib.math.util.MathUtil
+import org.wpilib.units.AngularAccelerationUnit
+import org.wpilib.units.Measure
+import org.wpilib.units.MomentOfInertiaUnit
+import org.wpilib.units.TimeUnit
+import org.wpilib.units.Units.Amps
+import org.wpilib.units.Units.Centimeters
+import org.wpilib.units.Units.Degrees
+import org.wpilib.units.Units.DegreesPerSecond
+import org.wpilib.units.Units.Feet
+import org.wpilib.units.Units.FeetPerSecond
+import org.wpilib.units.Units.Hertz
+import org.wpilib.units.Units.Inches
+import org.wpilib.units.Units.InchesPerSecond
+import org.wpilib.units.Units.InchesPerSecondPerSecond
+import org.wpilib.units.Units.KilogramSquareMeters
+import org.wpilib.units.Units.Kilograms
+import org.wpilib.units.Units.Meters
+import org.wpilib.units.Units.MetersPerSecond
+import org.wpilib.units.Units.MetersPerSecondPerSecond
+import org.wpilib.units.Units.Milliseconds
+import org.wpilib.units.Units.Pounds
+import org.wpilib.units.Units.RPM
+import org.wpilib.units.Units.Radians
+import org.wpilib.units.Units.RadiansPerSecond
+import org.wpilib.units.Units.RadiansPerSecondPerSecond
+import org.wpilib.units.Units.Rotations
+import org.wpilib.units.Units.RotationsPerSecond
+import org.wpilib.units.Units.RotationsPerSecondPerSecond
+import org.wpilib.units.Units.Second
+import org.wpilib.units.Units.Seconds
+import org.wpilib.units.Units.Volts
+import org.wpilib.units.VoltageUnit
+import org.wpilib.units.measure.Angle
+import org.wpilib.units.measure.AngularAcceleration
+import org.wpilib.units.measure.AngularVelocity
+import org.wpilib.units.measure.Current
+import org.wpilib.units.measure.Distance
+import org.wpilib.units.measure.LinearAcceleration
+import org.wpilib.units.measure.LinearVelocity
+import org.wpilib.units.measure.Mass
+import org.wpilib.units.measure.MomentOfInertia
+import org.wpilib.units.measure.Time
+import org.wpilib.units.measure.Velocity
+import org.wpilib.units.measure.Voltage
 
 /* Extension properties are ways of adding functionality to classes
  * we didn't create, without having to create a subclass.*/
@@ -45,55 +53,63 @@ import edu.wpi.first.units.measure.Voltage
 // You can use them like so:
 // val length = 5.inches
 // val angle = 10.degrees
-inline val Number.inches: Distance
+val Number.inches: Distance
     get() = Inches.of(this.toDouble())
-inline val Number.meters: Distance
+val Number.feet: Distance
+    get() = Feet.of(this.toDouble())
+val Number.meters: Distance
     get() = Meters.of(this.toDouble())
-inline val Number.centimeters: Distance
+val Number.centimeters: Distance
     get() = Centimeters.of(this.toDouble())
-inline val Number.seconds: Time
+val Number.milliseconds: Time
+    get() = Milliseconds.of(this.toDouble())
+val Number.seconds: Time
     get() = Seconds.of(this.toDouble())
-inline val Number.metersPerSecond: LinearVelocity
+val Number.metersPerSecond: LinearVelocity
     get() = MetersPerSecond.of(this.toDouble())
-inline val Number.inchesPerSecond: LinearVelocity
+val Number.inchesPerSecond: LinearVelocity
     get() = InchesPerSecond.of(this.toDouble())
-inline val Number.feetPerSecond: LinearVelocity
+val Number.inchesPerSecondPerSecond: LinearAcceleration
+    get() = InchesPerSecondPerSecond.of(this.toDouble())
+val Number.feetPerSecond: LinearVelocity
     get() = FeetPerSecond.of(this.toDouble())
-inline val Number.volts: Voltage
+val Number.volts: Voltage
     get() = Volts.of(this.toDouble())
-inline val Number.amps: Current
+val Number.amps: Current
     get() = Amps.of(this.toDouble())
-inline val Number.metersPerSecondPerSecond: LinearAcceleration
+val Number.metersPerSecondPerSecond: LinearAcceleration
     get() = MetersPerSecondPerSecond.of(this.toDouble())
-inline val Number.radians: Angle
+val Number.radians: Angle
     get() = Radians.of(this.toDouble())
-inline val Number.radiansPerSecond: AngularVelocity
+val Number.radiansPerSecond: AngularVelocity
     get() = RadiansPerSecond.of(this.toDouble())
-inline val Number.radiansPerSecondPerSecond: AngularAcceleration
+val Number.radiansPerSecondPerSecond: AngularAcceleration
     get() = RadiansPerSecondPerSecond.of(this.toDouble())
-inline val Number.rpm
+val Number.rpm: AngularVelocity
     get() = RPM.of(this.toDouble())
-inline val Number.degrees: Angle
+val Number.degrees: Angle
     get() = Degrees.of(this.toDouble())
-inline val Number.rotationsPerSecond: AngularVelocity
+val Number.rotationsPerSecond: AngularVelocity
     get() = RotationsPerSecond.of(this.toDouble())
-inline val Number.rotationsPerSecondPerSecond: AngularAcceleration
+val Number.rotationsPerSecondPerSecond: AngularAcceleration
     get() = RotationsPerSecondPerSecond.of(this.toDouble())
-inline val Number.rotationsPerSecondCubed: Velocity<AngularAccelerationUnit>
+val Number.rotationsPerSecondCubed: Velocity<AngularAccelerationUnit>
     get() = RotationsPerSecondPerSecond.of(this.toDouble()).per(Second)
-inline val Number.voltsPerSecond: Velocity<VoltageUnit>
+val Number.voltsPerSecond: Velocity<VoltageUnit>
     get() = Volts.of(this.toDouble()).per(Second)
-inline val Number.rotations: Angle
+val Number.rotations: Angle
     get() = Rotations.of(this.toDouble())
-inline val Number.pounds: Mass
+val Number.pounds: Mass
     get() = Pounds.of(this.toDouble())
-inline val Number.kilogramSquareMeters: MomentOfInertia
+val Number.kilogramSquareMeters: MomentOfInertia
     get() = KilogramSquareMeters.of(this.toDouble())
-inline val Number.poundSquareInches: MomentOfInertia
-    get() = PoundsSquareInches.of(this.toDouble())
+val Number.poundSquareInches: MomentOfInertia
+    get() = PoundSquareInches.of(this.toDouble())
+val Number.hz: org.wpilib.units.measure.Frequency
+    get() = Hertz.of(this.toDouble())
 
-val PoundsSquareInches: MomentOfInertiaUnit =
-    Pounds.mult(InchesPerSecond).mult(Inches).mult(RadiansPerSecond)
+val PoundSquareInches: MomentOfInertiaUnit =
+    MomentOfInertiaUnit.combine(Pounds.mult(InchesPerSecond).mult(Inches), RadiansPerSecond)
 
 // These extension properties allow converting from a unit to a raw value
 // You can use them like so:
@@ -101,36 +117,42 @@ val PoundsSquareInches: MomentOfInertiaUnit =
 // val tenMetersInInches = meters.inches
 // val rotations = Rotations.of(5)
 // val fiveRotationsInDegrees = rotations.degrees
-inline val Distance.inches
+val Distance.inches
     get() = this.`in`(Inches)
-inline val Distance.meters
+val Distance.meters
     get() = this.`in`(Meters)
-inline val Distance.centimeters
+val Distance.centimeters
     get() = this.`in`(Centimeters)
-inline val LinearVelocity.metersPerSecond
+val LinearVelocity.metersPerSecond
     get() = this.`in`(MetersPerSecond)
-inline val AngularVelocity.radiansPerSecond
+val LinearAcceleration.metersPerSecondPerSecond
+    get() = this.`in`(MetersPerSecondPerSecond)
+val AngularVelocity.radiansPerSecond
     get() = this.`in`(RadiansPerSecond)
-inline val AngularVelocity.rotationsPerSecond
+val AngularVelocity.rotationsPerSecond
     get() = this.`in`(RotationsPerSecond)
-inline val AngularVelocity.rpm
+val AngularVelocity.degreesPerSecond
+    get() = this.`in`(DegreesPerSecond)
+val AngularVelocity.rpm
     get() = this.`in`(RPM)
-inline val AngularAcceleration.radiansPerSecondPerSecond
+val AngularAcceleration.radiansPerSecondPerSecond
     get() = this.`in`(RadiansPerSecondPerSecond)
-inline val Voltage.volts
+val Voltage.volts
     get() = this.`in`(Volts)
-inline val Angle.radians
+val Angle.radians
     get() = this.`in`(Radians)
-inline val Angle.degrees
+val Angle.degrees
     get() = this.`in`(Degrees)
-inline val Angle.rotations
+val Angle.rotations
     get() = this.`in`(Rotations)
-inline val Current.amps
+val Current.amps
     get() = this.`in`(Amps)
-inline val Mass.kilograms
+val Mass.kilograms
     get() = this.`in`(Kilograms)
-inline val MomentOfInertia.kilogramSquareMeters
+val MomentOfInertia.kilogramSquareMeters
     get() = this.`in`(KilogramSquareMeters)
+val Measure<TimeUnit>.seconds
+    get() = this.`in`(Seconds)
 
 fun Angle.toDistance(radius: Distance): Distance = radius * this.radians
 
@@ -139,5 +161,13 @@ fun Distance.toAngle(radius: Distance): Angle = Radians.of((this / radius).magni
 fun LinearVelocity.toAngularVelocity(radius: Distance): AngularVelocity =
     RadiansPerSecond.of(this.metersPerSecond / radius.meters)
 
+fun LinearAcceleration.toAngularAcceleration(radius: Distance): AngularAcceleration =
+    RadiansPerSecondPerSecond.of(this.metersPerSecondPerSecond / radius.meters)
+
 fun AngularVelocity.toLinearVelocity(radius: Distance): LinearVelocity =
     MetersPerSecond.of(radiansPerSecond * radius.meters)
+
+fun <U : Measure<*>> U.interpolate(endValue: U, t: Double): U {
+    return unit().ofBaseUnits(MathUtil.lerp(baseUnitMagnitude(), endValue.baseUnitMagnitude(), t))
+        as U
+}

@@ -1,48 +1,66 @@
 package frc.robot
 
-import edu.wpi.first.hal.FRCNetComm.tInstances
-import edu.wpi.first.hal.FRCNetComm.tResourceType
-import edu.wpi.first.hal.HAL
-import edu.wpi.first.wpilibj.TimedRobot
-import edu.wpi.first.wpilibj.util.WPILibVersion
-import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.CommandScheduler
+import com.ctre.phoenix6.SignalLogger
+import frc.robot.auto.Auto
+import frc.robot.generated.Telemetry
+import frc.robot.subsystems.SwerveDrivetrain
+import org.littletonrobotics.junction.LoggedRobot
+import org.littletonrobotics.junction.Logger
+import org.littletonrobotics.junction.networktables.LoggedNetworkChooser
+import org.littletonrobotics.junction.networktables.NT4Publisher
+import org.wpilib.driverstation.DriverStation
+import org.wpilib.driverstation.internal.DriverStationBackend
+import org.wpilib.system.DataLogManager
+import org.wpilib.util.UsageReporting
 
-object Robot : TimedRobot() {
+object Robot : LoggedRobot() {
+    private val autoChooser = LoggedNetworkChooser<Auto>("Auto")
 
-    private var autonomousCommand: Command? = null
+    private var selectedAuto: Auto? = null
 
     init {
-        HAL.report(
-            tResourceType.kResourceType_Language,
-            tInstances.kLanguage_Kotlin,
-            0,
-            WPILibVersion.Version,
-        )
+        UsageReporting.reportUsage("Language", "Kotlin")
+        DriverStationBackend.silenceJoystickConnectionAlert(true)
+        Logger.recordMetadata("GitBranch", GIT_BRANCH)
+        Logger.recordMetadata("GitSHA", GIT_SHA)
+        Logger.recordMetadata("GitDirty", DIRTY.toString())
+        Logger.recordMetadata("BuildDate", BUILD_DATE)
+        Logger.addDataReceiver(NT4Publisher())
+        Logger.start()
+        if (isReal()) {
+            // DataLog will automatically log all NT changes. AKit logs to NT, DataLog logs NT to
+            // file
+            DataLogManager.start()
+            SignalLogger.setPath("/U/ctre-logs")
+            SignalLogger.start()
+        }
+        // Record both DS control and joystick data
+        DriverStation.startDataLog(DataLogManager.getLog())
+        SwerveDrivetrain.registerTelemetry(Telemetry::telemeterize)
     }
 
     override fun robotPeriodic() {
-        CommandScheduler.getInstance().run()
+        SwerveDrivetrain.periodic()
     }
-
-    override fun disabledInit() {}
-
-    override fun disabledPeriodic() {}
 
     override fun autonomousInit() {
-        autonomousCommand?.schedule()
+        selectedAuto = autoChooser.get()
+        selectedAuto?.init()
     }
 
-    override fun autonomousPeriodic() {}
-
-    override fun teleopInit() {
-        autonomousCommand?.cancel()
+    override fun autonomousPeriodic() {
+        selectedAuto?.run()
     }
 
-    /** This method is called periodically during operator control. */
-    override fun teleopPeriodic() {}
+    override fun teleopPeriodic() {
+        // Auto calls driveToPose() and rotateAroundPoint() directly,
+        // so the drivetrain state machine runs only in teleop
+        SwerveDrivetrain.stateTransitions()
+        SwerveDrivetrain.stateActions()
+    }
 
-    override fun simulationInit() {}
-
-    override fun simulationPeriodic() {}
+    override fun disabledInit() {
+        // Re-enables brake mode on motors
+        SwerveDrivetrain.idle()
+    }
 }
